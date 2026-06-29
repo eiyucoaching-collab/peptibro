@@ -1,0 +1,24 @@
+{
+    "name": "Peptibro",
+    "short_name": "Peptibro",
+    "description": "Seguimiento de Protocolos de Péptidos",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0f1116",
+    "theme_color": "#1a1d24",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f489/512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f489/192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
