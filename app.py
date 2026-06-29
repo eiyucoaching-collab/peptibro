@@ -959,6 +959,242 @@ with tab_dashboard:
                 except Exception as e:
                     st.error(f"Error leyendo CSV: {e}")
 
+    # ============================================================
+    # ANÁLISIS PREDICTIVO IA
+    # ============================================================
+    st.divider()
+    with st.expander("🔮 Análisis Predictivo IA (Sin analítica real)", expanded=False):
+        st.markdown("""
+        **Simula una analítica basándose en tu protocolo y síntomas.**
+        La IA generará valores predictivos basados en literatura médica y tu perfil.
+        
+        ⚠️ *Esto es una herramienta educativa. NO sustituye una analítica real.*
+        """)
+
+        # Get current protocol from daily log
+        conn = get_connection()
+        df_protocol = pd.read_sql("""
+            SELECT DISTINCT compound_name, AVG(dosage_mcg) as avg_dose, COUNT(*) as days
+            FROM daily_log 
+            WHERE date >= date('now', '-90 days')
+            GROUP BY compound_name
+        """, conn)
+        conn.close()
+
+        default_protocol = ""
+        if not df_protocol.empty:
+            protocol_lines = []
+            for _, row in df_protocol.iterrows():
+                protocol_lines.append(f"- {row['compound_name']}: {int(row['avg_dose'])} mcg x {int(row['days'])} días")
+            default_protocol = "\n".join(protocol_lines)
+
+        with st.form("predictive_analysis"):
+            st.markdown("**📋 Perfil Personal**")
+            col_p1, col_p2, col_p3 = st.columns(3)
+            with col_p1:
+                age = st.number_input("Edad", min_value=18, max_value=100, value=35, step=1)
+            with col_p2:
+                sex = st.selectbox("Sexo", ["Masculino", "Femenino"])
+            with col_p3:
+                weight = st.number_input("Peso (kg)", min_value=40, max_value=200, value=80, step=1)
+
+            st.markdown("**💊 Protocolo Actual (últimos 90 días)**")
+            protocol = st.text_area(
+                "Péptidos y dosis",
+                value=default_protocol,
+                height=120,
+                placeholder="ej: BPC-157 250mcg, CJC-1295 2000mcg..."
+            )
+
+            st.markdown("**🩺 Síntomas y Estado Actual**")
+            col_s1, col_s2 = st.columns(2)
+            with col_s1:
+                sleep = st.select_slider("Calidad del sueño", options=["Mala", "Regular", "Buena", "Excelente"], value="Buena")
+                energy = st.select_slider("Nivel de energía", options=["Bajo", "Normal", "Alto", "Muy alto"], value="Normal")
+                mood = st.select_slider("Estado de ánimo", options=["Bajo", "Normal", "Elevado"], value="Normal")
+            with col_s2:
+                pain = st.select_slider("Dolor/inflamación", options=["Ninguno", "Leve", "Moderado", "Severo"], value="Ninguno")
+                libido = st.select_slider("Libido", options=["Baja", "Normal", "Alta"], value="Normal")
+                recovery = st.select_slider("Recuperación muscular", options=["Lenta", "Normal", "Rápida"], value="Normal")
+
+            st.markdown("**📝 Observaciones Adicionales**")
+            symptoms = st.text_area(
+                "Síntomas adicionales, efectos secundarios, o cambios recientes",
+                height=80,
+                placeholder="ej: hinchazón en sitio de inyección, mejora del dolor articular..."
+            )
+
+            generate_btn = st.button("🔮 Generar Análisis Predictivo", type="primary", use_container_width=True)
+
+        if generate_btn:
+            if not GEMINI_KEY:
+                st.error("Se requiere GEMINI_API_KEY para esta función.")
+            else:
+                with st.spinner("Generando análisis predictivo con IA..."):
+                    prompt = f"""Eres un endocrinólogo y especialista en péptidos biomédicos. Genera un ANÁLISIS PREDICTIVO de analítica de sangre basado en el siguiente perfil:
+
+PERFIL:
+- Edad: {age} años
+- Sexo: {sex}
+- Peso: {weight} kg
+
+PROTOCOLO ACTUAL:
+{protocol if protocol else "No hay péptidos registrados"}
+
+ESTADO ACTUAL:
+- Sueño: {sleep}
+- Energía: {energy}
+- Ánimo: {mood}
+- Dolor/inflamación: {pain}
+- Libido: {libido}
+- Recuperación muscular: {recovery}
+- Observaciones: {symptoms if symptoms else "Ninguna"}
+
+Basándote en literatura médica sobre péptidos, genera VALORES PREDICTIVOS para estos biomarcadores con su justificación:
+- IGF-1 (rango normal: 100-300 ng/mL)
+- Glucosa en ayunas (70-99 mg/dL)
+- Testosterona libre (8-25 pg/mL)
+- Testosterona total (300-1000 ng/dL)
+- Estradiol (10-40 pg/mL)
+- Colesterol total (0-200 mg/dL)
+- LDL (0-100 mg/dL)
+- HDL (40+ mg/dL)
+- Triglicéridos (0-150 mg/dL)
+- ALT (0-40 U/L)
+- AST (0-40 U/L)
+- TSH (0.4-4.0 mIU/L)
+- Creatinina (0.7-1.3 mg/dL)
+
+Responde SOLO con JSON válido (sin markdown) con esta estructura:
+{
+    "igf1": {"value": 185, "justification": "..."},
+    "glucose": {"value": 85, "justification": "..."},
+    "free_testosterone": {"value": 15.5, "justification": "..."},
+    "total_testosterone": {"value": 550, "justification": "..."},
+    "estradiol": {"value": 25, "justification": "..."},
+    "cholesterol_total": {"value": 185, "justification": "..."},
+    "ldl": {"value": 95, "justification": "..."},
+    "hdl": {"value": 55, "justification": "..."},
+    "triglycerides": {"value": 110, "justification": "..."},
+    "alt": {"value": 22, "justification": "..."},
+    "ast": {"value": 24, "justification": "..."},
+    "tsh": {"value": 2.1, "justification": "..."},
+    "creatinine": {"value": 0.9, "justification": "..."},
+    "summary": "Resumen clínico del análisis...",
+    "recommendations": ["Recomendación 1", "Recomendación 2", "Recomendación 3"]
+}"""
+
+                    try:
+                        from rag_engine import _call_gemini_with_retry
+                        result = _call_gemini_with_retry(prompt)
+                        
+                        if result:
+                            # Clean JSON response
+                            json_str = result.strip()
+                            if json_str.startswith("```"):
+                                json_str = json_str.split("\n", 1)[1].rsplit("```", 1)[0]
+                            
+                            data = json.loads(json_str)
+                            
+                            # Store in session
+                            st.session_state.predictive_data = data
+                            st.session_state.predictive_protocol = protocol
+                            st.session_state.predictive_profile = {
+                                "age": age, "sex": sex, "weight": weight,
+                                "sleep": sleep, "energy": energy, "pain": pain
+                            }
+                        else:
+                            st.error("No se pudo generar el análisis. Intenta de nuevo.")
+                    except json.JSONDecodeError:
+                        st.error("Error procesando respuesta de IA. Intenta de nuevo.")
+                    except Exception as e:
+                        st.error(f"Error: {str(e)}")
+
+        # Display results if available
+        if "predictive_data" in st.session_state:
+            data = st.session_state.predictive_data
+            profile = st.session_state.predictive_profile
+
+            st.success("✅ Análisis predictivo generado")
+            
+            # Disclaimer
+            st.warning("⚠️ **AVISO:** Este es un análisis PREDICTIVO generado por IA. Los valores son estimaciones basadas en literatura médica y NO sustituyen una analítica real.")
+
+            # Profile summary
+            st.markdown(f"**Perfil:** {profile['age']} años, {profile['sex']}, {profile['weight']} kg | Sueño: {profile['sleep']} | Energía: {profile['energy']}")
+
+            # Create synthetic blood work entry
+            today = date.today().isoformat()
+            
+            # Show results table
+            st.markdown("### 📊 Valores Predictivos")
+            results_data = []
+            for marker in BIOMARKER_COLS:
+                if marker in data:
+                    val = data[marker]["value"]
+                    just = data[marker]["justification"]
+                    ref = REFERENCE_RANGES.get(marker, {})
+                    in_range = ref.get("min", 0) <= val <= ref.get("max", 999)
+                    status = "✅" if in_range else "⚠️"
+                    results_data.append({
+                        "Biomarcador": ref.get("label", marker),
+                        "Valor": f"{val} {ref.get('unit', '')}",
+                        "Rango": f"{ref.get('min', '?')}-{ref.get('max', '?')}",
+                        "Estado": status
+                    })
+            
+            df_results = pd.DataFrame(results_data)
+            st.dataframe(df_results, use_container_width=True, hide_index=True)
+
+            # Justifications
+            with st.expander("📝 Justificaciones por biomarcador"):
+                for marker in BIOMARKER_COLS:
+                    if marker in data:
+                        ref = REFERENCE_RANGES.get(marker, {})
+                        val = data[marker]["value"]
+                        just = data[marker]["justification"]
+                        st.markdown(f"**{ref.get('label', marker)}** ({val} {ref.get('unit', '')})")
+                        st.caption(just)
+
+            # Summary and recommendations
+            st.markdown("### 🩺 Resumen Clínico")
+            st.info(data.get("summary", "Sin resumen disponible."))
+
+            st.markdown("### 💡 Recomendaciones")
+            for rec in data.get("recommendations", []):
+                st.markdown(f"- {rec}")
+
+            # Option to save as synthetic entry
+            if st.button("💾 Guardar como analítica sintética", type="secondary"):
+                conn = get_connection()
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT INTO blood_markers 
+                    (date, test_name, igf1, glucose, free_testosterone, total_testosterone, 
+                     estradiol, cholesterol_total, ldl, hdl, triglycerides, alt, ast, tsh, creatinine, notes)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    today, f"IA Predictivo - {profile['age']}a {profile['sex']}",
+                    data.get("igf1", {}).get("value"),
+                    data.get("glucose", {}).get("value"),
+                    data.get("free_testosterone", {}).get("value"),
+                    data.get("total_testosterone", {}).get("value"),
+                    data.get("estradiol", {}).get("value"),
+                    data.get("cholesterol_total", {}).get("value"),
+                    data.get("ldl", {}).get("value"),
+                    data.get("hdl", {}).get("value"),
+                    data.get("triglycerides", {}).get("value"),
+                    data.get("alt", {}).get("value"),
+                    data.get("ast", {}).get("value"),
+                    data.get("tsh", {}).get("value"),
+                    data.get("creatinine", {}).get("value"),
+                    f"[ANÁLISIS PREDICTIVO IA] Protocolo: {st.session_state.get('predictive_protocol', 'N/A')[:200]}"
+                ))
+                conn.commit()
+                conn.close()
+                st.success("✅ Analítica sintética guardada. Aparecerá en los gráficos.")
+                st.rerun()
+
 # ============================================================
 # TAB 4: COACH CLÍNICO (conversacional con contexto personal)
 # ============================================================
