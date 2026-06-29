@@ -1345,55 +1345,92 @@ with tab_coach:
 with tab_openclaw:
     st.header("🦞 Clawd - Asistente OpenClaw")
     
-    # Verificar si el servidor de OpenClaw está corriendo
-    import requests
-    try:
-        response = requests.get("http://127.0.0.1:18789", timeout=2)
-        openclaw_running = True
-    except:
-        openclaw_running = False
+    # Detect if running locally or on cloud
+    import os
+    is_cloud = os.environ.get("STREAMLIT_CLOUD") or os.path.exists("/tmp")
     
-    if openclaw_running:
-        st.success("✅ OpenClaw Gateway está ejecutándose")
+    if is_cloud:
+        # Cloud version - show info only
+        st.info("""
+        **📱 Clawd está disponible en tu computadora local.**
         
-        # Direct link instead of iframe (Streamlit blocks cross-origin iframes)
+        Esta versión de Peptibro corre en la nube y no puede acceder a OpenClaw directamente.
+        Para usar Clawd, necesitas ejecutar Peptibro localmente.
+        
+        **¿Qué es Clawd?**
+        - Asistente de IA especializado en péptidos y salud
+        - Puede consultarse por WhatsApp (próximamente)
+        - Base de conocimiento conectada a Peptibro
+        """)
+        
         st.markdown("""
-        ### 🦞 Clawd está listo
+        ### Skills de Clawd
         
-        **Abre el dashboard de OpenClaw en una nueva pestaña:**
+        | Skill | Descripción |
+        |-------|-------------|
+        | 🔍 peptide-lookup | Consulta protocolos de péptidos |
+        | 🚨 bloodwork-alerts | Alertas de analíticas fuera de rango |
+        | ⏰ dose-reminder | Recordatorios de dosis |
+        | 📋 protocol-summary | Resúmenes de protocolos |
+        """)
         
-        👉 [**Abrir Clawd Dashboard**](http://127.0.0.1:18789) 👈
+        st.markdown("""
+        **Para ejecutar Clawd localmente:**
+        ```bash
+        # Instalar OpenClaw
+        npm install -g openclaw
         
-        *Haz clic en el enlace de arriba para abrir el asistente Clawd.*
+        # Iniciar gateway
+        openclaw gateway restart
+        
+        # Conectar Peptibro
+        openclaw channels add --channel whatsapp
+        ```
         """)
     else:
-        st.warning("⚠️ OpenClaw Gateway no está ejecutándose")
-        st.markdown("""
-        Para iniciar OpenClaw:
-        1. Abre una terminal
-        2. Ejecuta: `openclaw gateway restart`
-        3. O ejecuta: `C:\\Users\\FUJITSU\\Peptibro\\start_peptibro.bat`
+        # Local version - check connection
+        import requests
+        try:
+            response = requests.get("http://127.0.0.1:18789", timeout=2)
+            openclaw_running = True
+        except:
+            openclaw_running = False
         
-        **Dashboard:** http://127.0.0.1:18789
+        if openclaw_running:
+            st.success("✅ OpenClaw Gateway está ejecutándose")
+            st.markdown("""
+            ### 🦞 Clawd está listo
+            
+            **Abre el dashboard de OpenClaw en una nueva pestaña:**
+            
+            👉 [**Abrir Clawd Dashboard**](http://127.0.0.1:18789) 👈
+            """)
+        else:
+            st.warning("⚠️ OpenClaw Gateway no está ejecutándose")
+            st.markdown("""
+            Para iniciar OpenClaw:
+            1. Abre una terminal
+            2. Ejecuta: `openclaw gateway restart`
+            
+            **Dashboard:** http://127.0.0.1:18789
+            """)
+        
+        st.divider()
+        st.markdown("""
+        ### Sobre Clawd 🦞
+        
+        **Nombre:** Clawd
+        **Especialización:** Péptidos, salud y fitness
+        
+        **Skills disponibles:**
+        - 🔍 **peptide-lookup** - Consulta protocolos de péptidos
+        - 🚨 **bloodwork-alerts** - Alertas de analíticas
+        - ⏰ **dose-reminder** - Recordatorios de dosis
+        - 📋 **protocol-summary** - Resúmenes de protocolos
+        
+        **Modelo:** Gemini 2.0 Flash (gratis)
+        **Base de conocimiento:** Conectada a Peptibro
         """)
-    
-    # Información del asistente
-    st.divider()
-    st.markdown("""
-    ### Sobre Clawd 🦞
-    
-    **Nombre:** Clawd
-    **Especialización:** Péptidos, salud y fitness
-    
-    **Skills disponibles:**
-    - 🔍 **peptide-lookup** - Consulta protocolos de péptidos
-    - 🚨 **bloodwork-alerts** - Alertas de analíticas
-    - ⏰ **dose-reminder** - Recordatorios de dosis
-    - 📋 **protocol-summary** - Resúmenes de protocolos
-    
-    **Modelo:** Gemini 2.0 Flash (gratis)
-    **Base de conocimiento:** Conectada a Peptibro
-    """)
 
 # Footer
 st.divider()
