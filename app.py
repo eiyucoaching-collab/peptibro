@@ -533,9 +533,10 @@ st.title("Peptibro")
 st.caption("Protocolos basados 100% en literatura médica local • Sin alucinaciones")
 
 # Pestañas principales
-tab_log, tab_oraculo, tab_dashboard, tab_coach, tab_openclaw = st.tabs([
+tab_log, tab_biblioteca, tab_oraculo, tab_dashboard, tab_coach, tab_openclaw = st.tabs([
     "📝 Log Diario",
-    "📖 Biblioteca Clínica (El Oráculo)",
+    "📚 Biblioteca de Péptidos",
+    "🔮 Oráculo Clínico",
     "📊 Dashboard Analíticas",
     "🧠 Coach Clínico",
     "🦞 Clawd (OpenClaw)"
@@ -591,7 +592,468 @@ with tab_log:
             st.info("Aún no hay registros. Usa el formulario de la izquierda.")
 
 # ============================================================
-# TAB 2: BIBLIOTECA CLÍNICA (ORÁCULO RAG)
+# TAB: BIBLIOTECA DE PÉPTIDOS
+# ============================================================
+with tab_biblioteca:
+    st.header("📚 Biblioteca de Péptidos")
+    st.caption("Guía completa de péptidos con usos, beneficios y riesgos basada en literatura médica")
+
+    # Peptide database
+    PEPTIDE_DB = {
+        "BPC-157": {
+            "category": "Reparación Tisular",
+            "full_name": "Body Protection Compound-157",
+            "description": "Péptido de 157 aminoácidos derivado de una proteína gástrica. Potente agente de reparación y protección de tejidos.",
+            "uses": [
+                "Curación de heridas y lesiones musculares",
+                "Reparación de tendones y ligamentos",
+                "Protección gástrica (úlceras, gastritis)",
+                "Recuperación de lesiones articulares",
+                "Neuroprotección y reparación nerviosa"
+            ],
+            "benefits": [
+                "Acelera la cicatrización de tejidos hasta 3x",
+                "Efecto angiogénico (nuevos vasos sanguíneos)",
+                "Protector gástrico sin efectos adversos significativos",
+                "Reduce inflamación sistémica",
+                "Mejora la recuperación muscular post-lesión"
+            ],
+            "risks": [
+                "Efectos secundarios mínimos reportados",
+                "Posible interacción con anticoagulantes",
+                "Datos a largo plazo limitados en humanos",
+                "No recomendado durante embarazo/lactancia"
+            ],
+            "typical_dose": "250-500 mcg subcutáneo 1-2x/día",
+            "cycle": "4-12 semanas, descanso de 4 semanas"
+        },
+        "TB-500": {
+            "category": "Reparación Tisular",
+            "full_name": "Timosina Beta-4 (fragmento)",
+            "description": "Fragmento sintético de la Timosina Beta-4, proteína presente en casi todos los tejidos humanos.",
+            "uses": [
+                "Recuperación de lesiones musculares",
+                "Reparación de tendones y ligamentos",
+                "Curación de heridas crónicas",
+                "Regeneración de tejido cardiaco",
+                "Anti-inflamatorio sistémico"
+            ],
+            "benefits": [
+                "Promueve la migración celular a sitios de lesión",
+                "Estimula la formación de nuevos vasos sanguíneos",
+                "Reduce formación de cicatrices",
+                "Efecto anti-inflamatorio potente",
+                "Mejora flexibilidad articular"
+            ],
+            "risks": [
+                "Generalmente bien tolerado",
+                "Posible somnolencia en dosis altas",
+                "Interacción con medicamentos antiplaquetarios",
+                "Evidencia limitada en humanos a largo plazo"
+            ],
+            "typical_dose": "2.5-5 mg subcutáneo 2x/semana",
+            "cycle": "4-8 semanas"
+        },
+        "CJC-1295": {
+            "category": "Eje Hormonal",
+            "full_name": "CJC-1295 (con/sin DAC)",
+            "description": "Análogo de la hormona liberadora de hormona del crecimiento (GHRH). Estimula la producción natural de GH.",
+            "uses": [
+                "Aumento de masa muscular magra",
+                "Reducción de grasa corporal",
+                "Mejora de calidad de sueño",
+                "Recuperación y reparación de tejidos",
+                "Anti-envejecimiento"
+            ],
+            "benefits": [
+                "Aumento significativo de IGF-1 y GH",
+                "Mejora composición corporal",
+                "Duerme más profundo y reparador",
+                "Efectos anti-envejecimiento documentados",
+                "Fácil administración (subcutánea)"
+            ],
+            "risks": [
+                "Retención de líquidos temporal",
+                "Dolor en sitio de inyección",
+                "Hormigueo o entumecimiento temporal",
+                "Posible aumento de insulina en ayunas",
+                "No usar con tumores activos"
+            ],
+            "typical_dose": "100-300 mcg 2-3x/día (sin DAC) o 2 mg/sem (con DAC)",
+            "cycle": "Ciclos de 3-6 meses"
+        },
+        "Ipamorelin": {
+            "category": "Eje Hormonal",
+            "full_name": "Ipamorelin",
+            "description": "Péptido secretagogo de GH (GHRP). Estimula la liberación de hormona del crecimiento de forma selectiva.",
+            "uses": [
+                "Aumento de GH e IGF-1",
+                "Mejora de calidad de sueño",
+                "Aumento de masa muscular",
+                "Reducción de grasa corporal",
+                "Recuperación atlética"
+            ],
+            "benefits": [
+                "Libera GH sin afectar cortisol o prolactina",
+                "Mejora dramática del sueño profundo",
+                "Efectos sinérgicos con CJC-1295",
+                "Seguro a largo plazo según estudios",
+                "Fácil dosificación (antes de dormir)"
+            ],
+            "risks": [
+                "Posible aumento temporal de apetito",
+                "Dolor leve en sitio de inyección",
+                "Mareos leves en algunos usuarios",
+                "No usar con cáncer activo"
+            ],
+            "typical_dose": "200-300 mcg subcutáneo antes de dormir",
+            "cycle": "3-6 meses continuos"
+        },
+        "Semaglutide": {
+            "category": "Metabólico",
+            "full_name": "Semaglutide (Ozempic/Wegovy)",
+            "description": "Agonista del receptor GLP-1. Reduce el apetito y mejora el control glucémico.",
+            "uses": [
+                "Pérdida de peso significativa",
+                "Control de diabetes tipo 2",
+                "Reducción de apetito y antojos",
+                "Mejora de sensibilidad a la insulina",
+                "Reducción de riesgo cardiovascular"
+            ],
+            "benefits": [
+                "Pérdida de peso del 10-15% en 68 semanas",
+                "Reducción de HbA1c significativa",
+                "Menor riesgo de eventos cardiovasculares",
+                "Una inyección semanal (conveniencia)",
+                "Efecto sobre el centro de saciedad cerebral"
+            ],
+            "risks": [
+                "Náuseas (común al inicio, se resuelve)",
+                "Vómitos temporales",
+                "Diarrea o estreñimiento",
+                "Riesgo de pancreatitis (raro)",
+                "Posible pérdida de masa muscular",
+                "Pérdida de peso rápida puede causar cálculos biliares"
+            ],
+            "typical_dose": "0.25 mg → 0.5 mg → 1 mg → 2.4 mg semanal",
+            "cycle": "Continuo bajo supervisión médica"
+        },
+        "Tirzepatide": {
+            "category": "Metabólico",
+            "full_name": "Tirzepatide (Mounjaro/Zepbound)",
+            "description": "Agonista dual de receptores GIP y GLP-1. Más potente que los agonistas de GLP-1 solos.",
+            "uses": [
+                "Pérdida de peso superior a semaglutide",
+                "Control de diabetes tipo 2",
+                "Reducción de apetito extrema",
+                "Mejora de metabolismo",
+                "Reducción de grasa visceral"
+            ],
+            "benefits": [
+                "Pérdida de peso del 20-25% en estudios",
+                "Mejor control glucémico que semaglutide",
+                "Efecto dual GIP+GLP-1 más completo",
+                "Una inyección semanal",
+                "Mejora marcadores lipídicos"
+            ],
+            "risks": [
+                "Náuseas más intensas que semaglutide al inicio",
+                "Vómitos frecuentes al ajustar dosis",
+                "Diarrea significativa",
+                "Riesgo de pancreatitis",
+                "Pérdida de masa muscular preocupante",
+                "Costo muy alto"
+            ],
+            "typical_dose": "2.5 mg → 5 mg → 10 mg → 15 mg semanal",
+            "cycle": "Continuo bajo supervisión médica"
+        },
+        "HGH": {
+            "category": "Eje Hormonal",
+            "full_name": "Hormona de Crecimiento Humana",
+            "description": "Hormona producida naturalmente por la hipófisis. Fundamental para crecimiento, reparación y metabolismo.",
+            "uses": [
+                "Aumento de masa muscular",
+                "Reducción de grasa corporal",
+                "Mejora de densidad ósea",
+                "Recuperación de lesiones",
+                "Anti-envejecimiento"
+            ],
+            "benefits": [
+                "Efectos anabólicos potentes",
+                "Mejora composición corporal drásticamente",
+                "Acelera recuperación de lesiones",
+                "Mejora calidad de piel y cabello",
+                "Efectos neuroprotectores"
+            ],
+            "risks": [
+                "Acromegalia (crecimiento excesivo de tejidos)",
+                "Retención de líquidos significativa",
+                "Dolor articular (síndrome del túnel carpiano)",
+                "Resistencia a la insulina / diabetes",
+                "Aumento de riesgo de cáncer (debate)",
+                "Costo muy alto",
+                "Requiere refrigeración"
+            ],
+            "typical_dose": "2-6 IU subcutáneo diario",
+            "cycle": "3-6 meses, descansos obligatorios"
+        },
+        "GHK-Cu": {
+            "category": "Reparación Tisular",
+            "full_name": "GHK-Cu (Péptido de Cobre)",
+            "description": "Tripéptido que contiene cobre. Promueve reparación de piel, tejido conectivo y efecto anti-envejecimiento.",
+            "uses": [
+                "Reparación de piel y tejidos",
+                "Anti-envejecimiento cutáneo",
+                "Cicatrización de heridas",
+                "Regeneración capilar",
+                "Protección contra daño oxidativo"
+            ],
+            "benefits": [
+                "Estimula producción de colágeno y elastina",
+                "Efecto anti-envejecimiento documentado",
+                "Mejora textura y firmeza de piel",
+                "Promueve crecimiento capilar",
+                "Propiedades anti-inflamatorias"
+            ],
+            "risks": [
+                "Muy seguro según estudios",
+                "Posible irritación cutánea en uso tópico",
+                "No usar con exceso de cobre (hemocromatosis)",
+                "Efectos sistémicos limitados por vía subcutánea"
+            ],
+            "typical_dose": "1-2.5 mg subcutáneo diario",
+            "cycle": "Continuo o ciclos de 3 meses"
+        },
+        "Epithalon": {
+            "category": "Longevidad",
+            "full_name": "Epitalon / Epithalon",
+            "description": "Tetrapéptido que estimula la telomerasa, enzima que protege los telómeros y ralentiza el envejecimiento celular.",
+            "uses": [
+                "Anti-envejecimiento celular",
+                "Extensión de longitud de telómeros",
+                "Mejora de función inmunológica",
+                "Regulación del ritmo circadiano",
+                "Prevención de enfermedades degenerativas"
+            ],
+            "benefits": [
+                "Estimula telomerasa (enzima anti-envejecimiento)",
+                "Aumenta longitud de telómeros en estudios",
+                "Mejora calidad de sueño profundo",
+                "Efecto rejuvenecedor documentado en Rusia",
+                "Potencial extensión de vida saludable"
+            ],
+            "risks": [
+                "Datos a largo plazo limitados",
+                "Posible interferencia con hormonas sexuales",
+                "No recomendado con tumores activos",
+                "Disponibilidad limitada"
+            ],
+            "typical_dose": "5 mg subcutáneo diario por 10-20 días",
+            "cycle": "1-2 veces al año"
+        },
+        "MOTS-C": {
+            "category": "Longevidad",
+            "full_name": "Mitochondrial Open Reading Frame of the 12S rRNA-Type-C",
+            "description": "Péptido mitocondrial que actúa como hormona metabólica. Regula metabolismo y sensibilidad a la insulina.",
+            "uses": [
+                "Regulación metabólica",
+                "Mejora de sensibilidad a la insulina",
+                "Pérdida de peso",
+                "Protección mitocondrial",
+                "Anti-envejecimiento"
+            ],
+            "benefits": [
+                "Regula metabolismo de ácidos grasos",
+                "Mejora utilización de glucosa",
+                "Efecto anti-obesidad en estudios animales",
+                "Protege mitocondrias del daño oxidativo",
+                "Potencial anti-envejecimiento"
+            ],
+            "risks": [
+                "Datos limitados en humanos",
+                "Efectos a largo plazo desconocidos",
+                "No recomendado durante embarazo",
+                "Investigación en curso"
+            ],
+            "typical_dose": "5 mg subcutáneo semanal",
+            "cycle": "8-12 semanas"
+        },
+        "NAD+": {
+            "category": "Longevidad",
+            "full_name": "Nicotinamida Adenina Dinucleótido",
+            "description": "Coenzima fundamental para producción de energía celular y reparación de ADN. Disminuye con la edad.",
+            "uses": [
+                "Anti-envejecimiento celular",
+                "Mejora de producción energética",
+                "Protección de ADN",
+                "Función cognitiva",
+                "Recuperación post-exercicio"
+            ],
+            "benefits": [
+                "Restaura niveles de NAD+ que disminuyen con la edad",
+                "Mejora producción de ATP energético",
+                "Activa sirtuinas (genes de longevidad)",
+                "Mejora función mitocondrial",
+                "Potencial efecto neuroprotector"
+            ],
+            "risks": [
+                "Inyección IV puede causar molestias",
+                "Náuseas con dosis altas IV",
+                "Oral tiene biodisponibilidad limitada",
+                "Posible interacción con medicamentos",
+                "Costo elevado para IV"
+            ],
+            "typical_dose": "250-500 mg IV semanal u 100-250 mg oral diario",
+            "cycle": "Ciclos de 4-8 semanas IV o continuo oral"
+        },
+        "Selank": {
+            "category": "Nootrópico",
+            "full_name": "Selank",
+            "description": "Análogo sintético de la tuftsina con efectos ansiolíticos y nootrópicos. Reduce ansiedad sin sedación.",
+            "uses": [
+                "Reducción de ansiedad",
+                "Mejora de memoria y aprendizaje",
+                "Reducción de estrés",
+                "Mejora de concentración",
+                "Tratamiento de fobias"
+            ],
+            "benefits": [
+                "Ansiolítico sin efectos sedantes",
+                "Mejora memoria de trabajo",
+                "Reduce cortisol y marcadores de estrés",
+                "Efecto rápido (1-2 horas)",
+                "No crea dependencia"
+            ],
+            "risks": [
+                "Muy seguro según estudios",
+                "Posible irritabilidad enบางคน",
+                "Interacción con otros ansiolíticos",
+                "Efectos a largo plazo poco estudiados"
+            ],
+            "typical_dose": "250-500 mcg nasal 2-3x/día",
+            "cycle": "2-4 semanas, descanso de 1 semana"
+        },
+        "Semax": {
+            "category": "Nootrópico",
+            "full_name": "Semax",
+            "description": "Análogo sintético de la hormona estimulante de melanocitos (MSH) con potentes efectos neuroprotectores y nootrópicos.",
+            "uses": [
+                "Mejora de memoria y concentración",
+                "Neuroprotección",
+                "Recuperación de daño cerebral",
+                "Mejora de función inmunológica",
+                "Tratamiento de accidente cerebrovascular"
+            ],
+            "benefits": [
+                "Potencia memoria y aprendizaje",
+                "Protege neuronas del daño",
+                "Estimula factor neurotrófico (BDNF)",
+                "Mejora flujo sanguíneo cerebral",
+                "Efecto anti-depresivo leve"
+            ],
+            "risks": [
+                "Generalmente bien tolerado",
+                "Posible insomnio si se toma tarde",
+                "Irritabilidad en algunos usuarios",
+                "No usar con tumores"
+            ],
+            "typical_dose": "300-600 mcg nasal 1-2x/día",
+            "cycle": "2-4 semanas"
+        },
+        "PT-141": {
+            "category": "Otros",
+            "full_name": "Bremelanotide (PT-141)",
+            "description": "Agonista de receptores melanocortina que actúa directamente sobre el sistema nervioso central para aumentar la libido.",
+            "uses": [
+                "Aumento de libido (hombres y mujeres)",
+                "Disfunción eréctil",
+                "Deseo sexual hypoactivo",
+                "Mejora de respuesta sexual"
+            ],
+            "benefits": [
+                "Actúa en el cerebro (no vasodilatador)",
+                "Efectivo para disfunción sexual psicogénica",
+                "Funciona tanto en hombres como mujeres",
+                "Una dosis dura 24-72 horas",
+                "No requiere estimulación sexual para funcionar"
+            ],
+            "risks": [
+                "Náuseas (efecto secundario más común)",
+                "Enrojecimiento facial temporal",
+                "Dolor de cabeza",
+                "Posible aumento de presión arterial",
+                "No combinar con otros medicamentos sexuales"
+            ],
+            "typical_dose": "1-2 mg subcutáneo según necesidad",
+            "cycle": "Según necesidad, no más de 1x/día"
+        },
+    }
+
+    # Search and filter
+    col_search, col_filter = st.columns([3, 1])
+    with col_search:
+        search = st.text_input("🔍 Buscar péptido", placeholder="Escribe el nombre del péptido...")
+    with col_filter:
+        categories = ["Todos"] + list(set(p["category"] for p in PEPTIDE_DB.values()))
+        category_filter = st.selectbox("Filtrar por categoría", categories)
+
+    # Filter peptides
+    filtered_peptides = PEPTIDE_DB.copy()
+    if search:
+        filtered_peptides = {k: v for k, v in filtered_peptides.items() 
+                           if search.lower() in k.lower() or search.lower() in v["full_name"].lower()}
+    if category_filter != "Todos":
+        filtered_peptides = {k: v for k, v in filtered_peptides.items() 
+                           if v["category"] == category_filter}
+
+    # Display peptides
+    for name, info in filtered_peptides.items():
+        with st.expander(f"**{name}** - {info['full_name']} ({info['category']})", expanded=False):
+            st.markdown(f"### {name}")
+            st.caption(info['full_name'])
+            st.info(info['description'])
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("**✅ Usos principales:**")
+                for use in info['uses']:
+                    st.markdown(f"- {use}")
+                
+                st.markdown("**💊 Dosis típica:**")
+                st.code(info['typical_dose'])
+                
+                st.markdown("**🔄 Ciclo:**")
+                st.code(info['cycle'])
+            
+            with col2:
+                st.markdown("**⭐ Beneficios:**")
+                for benefit in info['benefits']:
+                    st.markdown(f"- {benefit}")
+                
+                st.markdown("**⚠️ Riesgos:**")
+                for risk in info['risks']:
+                    st.markdown(f"- {risk}")
+
+    # Summary table
+    st.divider()
+    st.markdown("### 📊 Resumen Rápido")
+    
+    summary_data = []
+    for name, info in filtered_peptides.items():
+        summary_data.append({
+            "Péptido": name,
+            "Categoría": info['category'],
+            "Dosis": info['typical_dose'][:30] + "...",
+            "Ciclo": info['cycle'][:25] + "..."
+        })
+    
+    if summary_data:
+        df_summary = pd.DataFrame(summary_data)
+        st.dataframe(df_summary, use_container_width=True, hide_index=True)
+
+# ============================================================
+# TAB: ORÁCULO CLÍNICO (RAG)
 # ============================================================
 with tab_oraculo:
     st.header("El Oráculo Clínico")
@@ -975,21 +1437,27 @@ with tab_dashboard:
         """)
 
         # Get current protocol from daily log
-        conn = get_connection()
-        df_protocol = pd.read_sql("""
-            SELECT DISTINCT compound_name, AVG(dosage_mcg) as avg_dose, COUNT(*) as days
-            FROM daily_log 
-            WHERE date >= date('now', '-90 days')
-            GROUP BY compound_name
-        """, conn)
-        conn.close()
-
+        # Get current protocol from session state
         default_protocol = ""
-        if not df_protocol.empty:
-            protocol_lines = []
-            for _, row in df_protocol.iterrows():
-                protocol_lines.append(f"- {row['compound_name']}: {int(row['avg_dose'])} mcg x {int(row['days'])} días")
-            default_protocol = "\n".join(protocol_lines)
+        daily_log = st.session_state.get("daily_log", [])
+        if daily_log:
+            # Group by compound and calculate averages
+            compounds = {}
+            for entry in daily_log:
+                name = entry.get("compound_name", "")
+                dose = entry.get("dosage_mcg", 0)
+                if name:
+                    if name not in compounds:
+                        compounds[name] = {"total_dose": 0, "count": 0}
+                    compounds[name]["total_dose"] += dose
+                    compounds[name]["count"] += 1
+            
+            if compounds:
+                protocol_lines = []
+                for name, data in compounds.items():
+                    avg_dose = int(data["total_dose"] / data["count"])
+                    protocol_lines.append(f"- {name}: {avg_dose} mcg")
+                default_protocol = "\n".join(protocol_lines)
 
         with st.form("predictive_analysis"):
             st.markdown("**📋 Perfil Personal**")
