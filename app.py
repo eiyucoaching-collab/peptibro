@@ -1004,32 +1004,84 @@ with tab_dashboard:
             st.markdown("**💊 Protocolo Actual (últimos 90 días)**")
             st.caption("Selecciona los péptidos que estás tomando y sus dosis habituales")
 
-            # Predefined peptides with typical doses
+            # All peptides from compendium with typical doses
             PEPTIDE_OPTIONS = {
-                "BPC-157 (250 mcg/día)": "BPC-157 250 mcg subcutáneo diario",
-                "BPC-157 (500 mcg/día)": "BPC-157 500 mcg subcutáneo diario",
-                "TB-500 (2.5 mg/semana)": "TB-500 2.5 mg subcutáneo 2x/semana",
-                "TB-500 (5 mg/semana)": "TB-500 5 mg subcutáneo 2x/semana",
-                "CJC-1295 (2000 mcg/día)": "CJC-1295 DAC 2000 mcg subcutáneo diario",
-                "Ipamorelin (200 mcg/día)": "Ipamorelin 200 mcg subcutáneo antes de dormir",
-                "Ipamorelin (300 mcg/día)": "Ipamorelin 300 mcg subcutáneo antes de dormir",
-                "Semaglutide (0.25 mg/semana)": "Semaglutide 0.25 mg subcutáneo semanal",
-                "Semaglutide (0.5 mg/semana)": "Semaglutide 0.5 mg subcutáneo semanal",
-                "Semaglutide (1 mg/semana)": "Semaglutide 1 mg subcutáneo semanal",
-                "Tirzepatide (2.5 mg/semana)": "Tirzepatide 2.5 mg subcutáneo semanal",
-                "Tirzepatide (5 mg/semana)": "Tirzepatide 5 mg subcutáneo semanal",
-                "Tirzepatide (10 mg/semana)": "Tirzepatide 10 mg subcutáneo semanal",
-                "HGH (2 IU/día)": "Hormona de crecimiento 2 IU subcutáneo diario",
-                "HGH (4 IU/día)": "Hormona de crecimiento 4 IU subcutáneo diario",
-                "GHK-Cu (1 mg/día)": "GHK-Cu 1 mg subcutáneo diario",
-                "MOTS-C (5 mg/semana)": "MOTS-C 5 mg subcutáneo semanal",
-                "Epithalon (5 mg/día x 20 días)": "Epithalon 5 mg subcutáneo diario por 20 días",
-                "Selank (250 mcg/día)": "Selank 250 mcg nasal diario",
-                "Semax (300 mcg/día)": "Semax 300 mcg nasal diario",
-                "PT-141 (2 mg)": "PT-141 2 mg subcutáneo según necesidad",
-                "NAD+ (250 mg/semana)": "NAD+ 250 mg intravenoso semanal",
+                # Metabólicos
+                "Semaglutide (0.25 mg/sem)": "Semaglutide 0.25 mg subcutáneo semanal",
+                "Semaglutide (0.5 mg/sem)": "Semaglutide 0.5 mg subcutáneo semanal",
+                "Semaglutide (1 mg/sem)": "Semaglutide 1 mg subcutáneo semanal",
+                "Semaglutide (2.4 mg/sem)": "Semaglutide 2.4 mg subcutáneo semanal (Wegovy)",
+                "Tirzepatide (2.5 mg/sem)": "Tirzepatide 2.5 mg subcutáneo semanal",
+                "Tirzepatide (5 mg/sem)": "Tirzepatide 5 mg subcutáneo semanal",
+                "Tirzepatide (10 mg/sem)": "Tirzepatide 10 mg subcutáneo semanal",
+                "Tirzepatide (15 mg/sem)": "Tirzepatide 15 mg subcutáneo semanal",
+                "Cagrilintide (1.2 mg/sem)": "Cagrilintide 1.2 mg subcutáneo semanal",
+                "Retatrutide (1 mg/sem)": "Retatrutide 1 mg subcutáneo semanal",
+                "Retatrutide (2 mg/sem)": "Retatrutide 2 mg subcutáneo semanal",
                 "AOD-9604 (300 mcg/día)": "AOD-9604 300 mcg subcutáneo diario",
                 "5-amino-1MQ (50 mg/día)": "5-amino-1MQ 50 mg oral diario",
+                "L-Carnitine (500 mg/día)": "L-Carnitina 500 mg subcutáneo diario",
+                "Lipo-C (inyección)": "Lipo-C (lipotrópico) inyección subcutánea",
+                "Lemon Bottle (inyección)": "Lemon Bottle lipotrópico inyección subcutánea",
+                
+                # Reparación Tisular
+                "BPC-157 (250 mcg/día)": "BPC-157 250 mcg subcutáneo diario",
+                "BPC-157 (500 mcg/día)": "BPC-157 500 mcg subcutáneo diario",
+                "BPC-157 (1000 mcg/día)": "BPC-157 1000 mcg subcutáneo diario",
+                "TB-500 (2.5 mg/sem)": "TB-500 2.5 mg subcutáneo 2x/semana",
+                "TB-500 (5 mg/sem)": "TB-500 5 mg subcutáneo 2x/semana",
+                "GHK-Cu (1 mg/día)": "GHK-Cu 1 mg subcutáneo diario",
+                "GHK-Cu (2.5 mg/día)": "GHK-Cu 2.5 mg subcutáneo diario",
+                "KPV (200 mcg/día)": "KPV 200 mcg subcutáneo diario",
+                "ARA-290 (2 mg/día)": "ARA-290 (Cibinetide) 2 mg subcutáneo diario",
+                "LL37 (100 mcg/día)": "LL37 100 mcg subcutáneo diario",
+                
+                # Eje Hormonal / GH
+                "HGH (2 IU/día)": "Hormona de crecimiento 2 IU subcutáneo diario",
+                "HGH (4 IU/día)": "Hormona de crecimiento 4 IU subcutáneo diario",
+                "HGH (6 IU/día)": "Hormona de crecimiento 6 IU subcutáneo diario",
+                "Tesamorelin (2 mg/día)": "Tesamorelin 2 mg subcutáneo diario",
+                "Ipamorelin (200 mcg/día)": "Ipamorelin 200 mcg subcutáneo antes de dormir",
+                "Ipamorelin (300 mcg/día)": "Ipamorelin 300 mcg subcutáneo antes de dormir",
+                "CJC-1295 DAC (2 mg/sem)": "CJC-1295 con DAC 2 mg subcutáneo semanal",
+                "CJC-1295 sin DAC (100 mcg/día)": "CJC-1295 sin DAC (Mod GRF 1-29) 100 mcg subcutáneo 3x/día",
+                "IGF-1 LR3 (40 mcg/día)": "IGF-1 LR3 40 mcg subcutáneo diario",
+                "PEG-MGF (200 mcg)": "PEG-MGF 200 mcg subcutáneo post-entrenamiento",
+                "Sermorelin (300 mcg/día)": "Sermorelin 300 mcg subcutáneo antes de dormir",
+                "GHRP-2 (100 mcg/día)": "GHRP-2 100 mcg subcutáneo 3x/día",
+                "GHRP-6 (100 mcg/día)": "GHRP-6 100 mcg subcutáneo 3x/día",
+                "Mecasermin (0.4 mg/kg)": "Mecasermin (Increlex) 0.4 mg/kg subcutáneo 2x/día",
+                
+                # Longevidad
+                "Thymosin Alpha-1 (1.6 mg/sem)": "Thymosin Alpha-1 (Zadaxin) 1.6 mg subcutáneo 2x/sem",
+                "Epithalon (5 mg/día x 20 días)": "Epithalon 5 mg subcutáneo diario por 20 días",
+                "MOTS-C (5 mg/sem)": "MOTS-C 5 mg subcutáneo semanal",
+                "NAD+ (250 mg/sem)": "NAD+ 250 mg intravenoso semanal",
+                "NAD+ (500 mg/sem)": "NAD+ 500 mg intravenoso semanal",
+                "NAD+ (100 mg/día oral)": "NAD+ (NMN/NR) 100 mg oral diario",
+                
+                # Nootrópicos
+                "Selank (250 mcg/día)": "Selank 250 mcg nasal diario",
+                "Semax (300 mcg/día)": "Semax 300 mcg nasal diario",
+                "DSIP (100 mcg/día)": "DSIP 100 mcg subcutáneo antes de dormir",
+                "PT-141 (2 mg)": "PT-141 (Bremelanotide) 2 mg subcutáneo según necesidad",
+                "Dihexa (5 mg/día)": "Dihexa 5 mg oral diario",
+                "Noopept (10-30 mg/día)": "Noopept (Omberacetam) 10-30 mg oral diario",
+                "Cerebrolysin (5 ml/día)": "Cerebrolysin 5 ml intramuscular diario x 20 días",
+                
+                # Blends
+                "Wolverine Stack (BPC+TB)": "BPC-157 250mcg + TB-500 2.5mg subcutáneo diario",
+                "Glow Stack (TB+BPC+GHK)": "TB-500 2.5mg + BPC-157 250mcg + GHK-Cu 1mg subcutáneo",
+                "Hyper Recovery (TB+BPC+CU+KPV)": "TB-500 + BPC-157 + GHK-Cu + KPV subcutáneo diario",
+                "CJC+Ipa Stack": "CJC-1295 DAC 2mg + Ipamorelin 300mcg subcutáneo diario",
+                
+                # Otros
+                "Melanotan II (1 mg/día)": "Melanotan II 1 mg subcutáneo diario",
+                "Kisspeptin-10 (100 mcg/día)": "Kisspeptin-10 100 mcg subcutáneo diario",
+                "Lunasina (50 mg/día)": "Lunasina 50 mg oral diario",
+                "hCG (500 IU/sem)": "hCG 500 IU subcutáneo semanal",
+                "Palmitoyl Pentapeptide-4 (tópico)": "Palmitoyl Pentapeptide-4 tópico diario",
+                "Acetyl Hexapeptide-8 (tópico)": "Argireline (Acetyl Hexapeptide-8) tópico diario",
             }
 
             selected_peptides = st.multiselect(
