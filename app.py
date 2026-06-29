@@ -17,11 +17,19 @@ from pathlib import Path
 import sys
 import io
 
-from database_setup import init_database, get_connection, read_sql, execute_write
+from database_setup import init_database, get_connection, read_sql, execute_insert, execute_delete
 from rag_engine import query_peptide_protocol, ingest_knowledge_base, has_knowledge_base, chat_with_coach
 
 # Initialize database
 init_database()
+
+# Monkey-patch pd.read_sql to use our custom read_sql
+_original_read_sql = pd.read_sql
+
+def _patched_read_sql(query, conn=None, *args, **kwargs):
+    return read_sql(query, conn)
+
+pd.read_sql = _patched_read_sql
 
 # ============================================================
 # RANGOS DE REFERENCIA PARA BIOMARCADORES
@@ -64,18 +72,9 @@ def format_marker_label(marker):
 def save_oracle_query(question, answer):
     """Guarda una consulta del Oraculo en la base de datos."""
     try:
-        conn = get_connection()
-        if conn:
-            cursor = conn.cursor()
-            timestamp = datetime.now().isoformat()
-            source = "ChromaDB"
-            model_used = "gemini-2.0-flash"
-            cursor.execute("""
-                INSERT INTO oracle_history (timestamp, question, answer, source, model_used)
-                VALUES (?, ?, ?, ?, ?)
-            """, (timestamp, question, answer, source, model_used))
-            conn.commit()
-            conn.close()
+        execute_insert("oracle_history", (
+            datetime.now().isoformat(), question, answer, "ChromaDB", "gemini-2.0-flash"
+        ))
     except Exception:
         pass
 
@@ -467,15 +466,9 @@ with st.sidebar:
         if st.form_submit_button("💉 Registrar", use_container_width=True):
             if q_compound.strip():
                 try:
-                    conn = get_connection()
-                    if conn:
-                        cursor = conn.cursor()
-                        cursor.execute("""
-                            INSERT INTO daily_log (date, compound_name, dosage_mcg, notes)
-                            VALUES (?, ?, ?, ?)
-                        """, (date.today().isoformat(), q_compound.strip(), float(q_dose), "Dosis rápida"))
-                        conn.commit()
-                        conn.close()
+                    execute_insert("daily_log", (
+                        date.today().isoformat(), q_compound.strip(), float(q_dose), "Dosis rápida"
+                    ))
                     st.success(f"✅ {q_compound} - {q_dose} mcg")
                     st.rerun()
                 except Exception as e:
@@ -570,21 +563,13 @@ with tab_log:
                     st.error("El nombre del compuesto es obligatorio.")
                 else:
                     try:
-                        conn = get_connection()
-                        if conn:
-                            cursor = conn.cursor()
-                            cursor.execute("""
-                                INSERT INTO daily_log (date, compound_name, dosage_mcg, notes)
-                                VALUES (?, ?, ?, ?)
-                            """, (log_date.isoformat(), compound.strip(), float(dosage), notes.strip() or None))
-                            conn.commit()
-                            conn.close()
+                        execute_insert("daily_log", (
+                            log_date.isoformat(), compound.strip(), float(dosage), notes.strip() or None
+                        ))
                         st.success(f"Registro guardado: {compound} - {dosage} mcg")
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error: {e}")
-                    st.success(f"Registro guardado: {compound} - {dosage} mcg")
-                    st.rerun()
 
     with col2:
         st.subheader("Últimos Registros")
@@ -688,11 +673,7 @@ with tab_oraculo:
             col_del1, col_del2 = st.columns([3, 1])
             with col_del2:
                 if st.button("🗑️ Borrar todo el historial", type="secondary"):
-                    conn = get_connection()
-                    cursor = conn.cursor()
-                    cursor.execute("DELETE FROM oracle_history")
-                    conn.commit()
-                    conn.close()
+                    execute_delete("oracle_history")
                     st.success("Historial borrado completamente.")
                     st.rerun()
 
@@ -706,11 +687,11 @@ with tab_oraculo:
                     st.text(answer_preview)
                 with col_h2:
                     if st.button(f"Borrar", key=f"del_{row['id']}"):
-                        conn = get_connection()
-                        cursor = conn.cursor()
-                        cursor.execute("DELETE FROM oracle_history WHERE id = ?", (row["id"],))
-                        conn.commit()
-                        conn.close()
+                        # Remove specific item from session state
+                        st.session_state.oracle_history = [
+                            item for item in st.session_state.oracle_history 
+                            if item.get("id") != row["id"]
+                        ]
                         st.rerun()
                 st.divider()
 
@@ -940,23 +921,13 @@ with tab_dashboard:
 
                 if st.form_submit_button("Guardar Analítica"):
                     try:
-                        conn = get_connection()
-                        if conn:
-                            cursor = conn.cursor()
-                            cursor.execute("""
-                                INSERT INTO blood_markers 
-                                (date, test_name, igf1, glucose, free_testosterone, total_testosterone, 
-                                 estradiol, cholesterol_total, ldl, hdl, triglycerides, alt, ast, tsh, creatinine, notes)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                            """, (
-                                test_date.isoformat(), test_name,
-                                values["igf1"], values["glucose"], values["free_testosterone"], values["total_testosterone"],
-                                values["estradiol"], values["cholesterol_total"], values["ldl"], values["hdl"],
-                                values["triglycerides"], values["alt"], values["ast"], values["tsh"], values["creatinine"],
-                                manual_notes or None
-                            ))
-                            conn.commit()
-                            conn.close()
+                        execute_insert("blood_markers", (
+                            test_date.isoformat(), test_name,
+                            values["igf1"], values["glucose"], values["free_testosterone"], values["total_testosterone"],
+                            values["estradiol"], values["cholesterol_total"], values["ldl"], values["hdl"],
+                            values["triglycerides"], values["alt"], values["ast"], values["tsh"], values["creatinine"],
+                            manual_notes or None
+                        ))
                         st.success("Analítica guardada correctamente.")
                         st.rerun()
                     except Exception as e:
@@ -970,32 +941,22 @@ with tab_dashboard:
                     st.dataframe(df_import.head(), use_container_width=True)
                     if st.button("📥 Importar datos", type="primary"):
                         try:
-                            conn = get_connection()
-                            if conn:
-                                cursor = conn.cursor()
-                                imported = 0
-                                for _, row in df_import.iterrows():
-                                    try:
-                                        cursor.execute("""
-                                            INSERT INTO blood_markers 
-                                            (date, test_name, igf1, glucose, free_testosterone, total_testosterone, 
-                                             estradiol, cholesterol_total, ldl, hdl, triglycerides, alt, ast, tsh, creatinine)
-                                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                                        """, (
-                                            str(row.get("date", date.today().isoformat())),
-                                            str(row.get("test_name", "CSV Import")),
-                                            row.get("igf1"), row.get("glucose"), row.get("free_testosterone"),
-                                            row.get("total_testosterone"), row.get("estradiol"), row.get("cholesterol_total"),
-                                            row.get("ldl"), row.get("hdl"), row.get("triglycerides"),
-                                            row.get("alt"), row.get("ast"), row.get("tsh"), row.get("creatinine")
-                                        ))
-                                        imported += 1
-                                    except Exception as e:
-                                        st.warning(f"Error en fila: {e}")
-                                conn.commit()
-                                conn.close()
-                                st.success(f"✅ {imported} registros importados")
-                                st.rerun()
+                            imported = 0
+                            for _, row in df_import.iterrows():
+                                try:
+                                    execute_insert("blood_markers", (
+                                        str(row.get("date", date.today().isoformat())),
+                                        str(row.get("test_name", "CSV Import")),
+                                        row.get("igf1"), row.get("glucose"), row.get("free_testosterone"),
+                                        row.get("total_testosterone"), row.get("estradiol"), row.get("cholesterol_total"),
+                                        row.get("ldl"), row.get("hdl"), row.get("triglycerides"),
+                                        row.get("alt"), row.get("ast"), row.get("tsh"), row.get("creatinine")
+                                    ))
+                                    imported += 1
+                                except Exception as e:
+                                    st.warning(f"Error en fila: {e}")
+                            st.success(f"✅ {imported} registros importados")
+                            st.rerun()
                         except Exception as e:
                             st.error(f"Error: {e}")
                 except Exception as e:
@@ -1209,33 +1170,23 @@ Responde SOLO con JSON válido (sin markdown) con esta estructura:
             # Option to save as synthetic entry
             if st.button("💾 Guardar como analítica sintética", type="secondary"):
                 try:
-                    conn = get_connection()
-                    if conn:
-                        cursor = conn.cursor()
-                        cursor.execute("""
-                            INSERT INTO blood_markers 
-                            (date, test_name, igf1, glucose, free_testosterone, total_testosterone, 
-                             estradiol, cholesterol_total, ldl, hdl, triglycerides, alt, ast, tsh, creatinine, notes)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                        """, (
-                            today, f"IA Predictivo - {profile['age']}a {profile['sex']}",
-                            data.get("igf1", {}).get("value"),
-                            data.get("glucose", {}).get("value"),
-                            data.get("free_testosterone", {}).get("value"),
-                            data.get("total_testosterone", {}).get("value"),
-                            data.get("estradiol", {}).get("value"),
-                            data.get("cholesterol_total", {}).get("value"),
-                            data.get("ldl", {}).get("value"),
-                            data.get("hdl", {}).get("value"),
-                            data.get("triglycerides", {}).get("value"),
-                            data.get("alt", {}).get("value"),
-                            data.get("ast", {}).get("value"),
-                            data.get("tsh", {}).get("value"),
-                            data.get("creatinine", {}).get("value"),
-                            f"[ANÁLISIS PREDICTIVO IA] Protocolo: {st.session_state.get('predictive_protocol', 'N/A')[:200]}"
-                        ))
-                        conn.commit()
-                        conn.close()
+                    execute_insert("blood_markers", (
+                        today, f"IA Predictivo - {profile['age']}a {profile['sex']}",
+                        data.get("igf1", {}).get("value"),
+                        data.get("glucose", {}).get("value"),
+                        data.get("free_testosterone", {}).get("value"),
+                        data.get("total_testosterone", {}).get("value"),
+                        data.get("estradiol", {}).get("value"),
+                        data.get("cholesterol_total", {}).get("value"),
+                        data.get("ldl", {}).get("value"),
+                        data.get("hdl", {}).get("value"),
+                        data.get("triglycerides", {}).get("value"),
+                        data.get("alt", {}).get("value"),
+                        data.get("ast", {}).get("value"),
+                        data.get("tsh", {}).get("value"),
+                        data.get("creatinine", {}).get("value"),
+                        f"[ANÁLISIS PREDICTIVO IA] Protocolo: {st.session_state.get('predictive_protocol', 'N/A')[:200]}"
+                    ))
                     st.success("✅ Analítica sintética guardada. Aparecerá en los gráficos.")
                     st.rerun()
                 except Exception as e:

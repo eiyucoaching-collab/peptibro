@@ -1,111 +1,127 @@
 """
-Peptibro Database Setup - Robust Version for Streamlit Cloud
+Peptibro Database Setup - Simple In-Memory Version
+Uses only session state. No SQLite dependency.
 """
 
-import sqlite3
-import os
-from pathlib import Path
 import streamlit as st
-
-
-def _get_db_path():
-    """Get database path."""
-    if os.environ.get("STREAMLIT_CLOUD"):
-        return "/tmp/peptibro.db"
-    db_dir = Path(__file__).parent / "db"
-    db_dir.mkdir(exist_ok=True)
-    return str(db_dir / "peptibro.db")
-
-
-DB_PATH = _get_db_path()
-
-
-def _create_tables(conn):
-    """Create all tables if they don't exist."""
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS daily_log (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date TEXT NOT NULL,
-            compound_name TEXT NOT NULL,
-            dosage_mcg REAL NOT NULL,
-            notes TEXT
-        )
-    """)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS blood_markers (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date TEXT NOT NULL,
-            test_name TEXT,
-            igf1 REAL, glucose REAL, free_testosterone REAL,
-            total_testosterone REAL, estradiol REAL,
-            cholesterol_total REAL, ldl REAL, hdl REAL,
-            triglycerides REAL, alt REAL, ast REAL,
-            tsh REAL, creatinine REAL, notes TEXT
-        )
-    """)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS oracle_history (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            timestamp TEXT NOT NULL,
-            question TEXT NOT NULL,
-            answer TEXT NOT NULL,
-            source TEXT,
-            model_used TEXT
-        )
-    """)
-    conn.commit()
-
-
-@st.cache_resource
-def get_connection():
-    """Get cached SQLite connection."""
-    try:
-        conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-        conn.row_factory = sqlite3.Row
-        _create_tables(conn)
-        return conn
-    except Exception as e:
-        st.error(f"DB Error: {e}")
-        return None
+import pandas as pd
+from datetime import datetime
 
 
 def init_database():
-    """Initialize database."""
-    conn = get_connection()
-    if conn:
-        _create_tables(conn)
-    return conn is not None
+    """Initialize in-memory storage."""
+    if "db_initialized" not in st.session_state:
+        st.session_state.daily_log = []
+        st.session_state.blood_markers = []
+        st.session_state.oracle_history = []
+        st.session_state.next_id = {"daily_log": 1, "blood_markers": 1, "oracle_history": 1}
+        st.session_state.db_initialized = True
+    return True
+
+
+def get_connection():
+    """Return mock connection."""
+    return type("Conn", (), {"close": lambda s: None, "commit": lambda s: None})()
 
 
 def read_sql(query, conn=None):
-    """Safe SQL read with error handling."""
-    try:
-        if conn is None:
-            conn = get_connection()
-        if conn is None:
-            return __import__("pandas").DataFrame()
-        return __import__("pandas").read_sql(query, conn)
-    except Exception:
-        return __import__("pandas").DataFrame()
+    """Read data from session state."""
+    q = query.lower()
+    
+    if "daily_log" in q:
+        data = st.session_state.get("daily_log", [])
+        if not data:
+            return pd.DataFrame(columns=["id", "date", "compound_name", "dosage_mcg", "notes"])
+        df = pd.DataFrame(data)
+        if "ORDER BY date DESC" in query.upper():
+            df = df.sort_values("date", ascending=False)
+        if "LIMIT" in query.upper():
+            try:
+                limit = int(query.upper().split("LIMIT")[1].strip().split()[0])
+                df = df.head(limit)
+            except:
+                pass
+        return df[["id", "date", "compound_name", "dosage_mcg", "notes"]]
+    
+    elif "blood_markers" in q:
+        data = st.session_state.get("blood_markers", [])
+        cols = ["id", "date", "test_name", "igf1", "glucose", "free_testosterone",
+                "total_testosterone", "estradiol", "cholesterol_total", "ldl", "hdl",
+                "triglycerides", "alt", "ast", "tsh", "creatinine", "notes"]
+        if not data:
+            return pd.DataFrame(columns=cols)
+        df = pd.DataFrame(data)
+        if "ORDER BY date ASC" in query.upper():
+            df = df.sort_values("date", ascending=True)
+        elif "ORDER BY date DESC" in query.upper():
+            df = df.sort_values("date", ascending=False)
+        return df[cols]
+    
+    elif "oracle_history" in q:
+        data = st.session_state.get("oracle_history", [])
+        if not data:
+            return pd.DataFrame(columns=["id", "timestamp", "question", "answer", "source", "model_used"])
+        df = pd.DataFrame(data)
+        if "ORDER BY timestamp DESC" in query.upper():
+            df = df.sort_values("timestamp", ascending=False)
+        if "LIMIT" in query.upper():
+            try:
+                limit = int(query.upper().split("LIMIT")[1].strip().split()[0])
+                df = df.head(limit)
+            except:
+                pass
+        return df[["id", "timestamp", "question", "answer", "source", "model_used"]]
+    
+    return pd.DataFrame()
 
 
-def execute_write(query, params=None):
-    """Safe SQL write with error handling."""
-    try:
-        conn = get_connection()
-        if conn is None:
-            return False
-        cursor = conn.cursor()
-        if params:
-            cursor.execute(query, params)
-        else:
-            cursor.execute(query)
-        conn.commit()
-        return True
-    except Exception:
+def execute_insert(table, params):
+    """Insert data into session state."""
+    idx = st.session_state.next_id.get(table, 1)
+    
+    if table == "daily_log":
+        entry = {
+            "id": idx,
+            "date": params[0],
+            "compound_name": params[1],
+            "dosage_mcg": params[2],
+            "notes": params[3]
+        }
+    elif table == "blood_markers":
+        entry = {
+            "id": idx,
+            "date": params[0],
+            "test_name": params[1],
+            "igf1": params[2], "glucose": params[3],
+            "free_testosterone": params[4], "total_testosterone": params[5],
+            "estradiol": params[6], "cholesterol_total": params[7],
+            "ldl": params[8], "hdl": params[9], "triglycerides": params[10],
+            "alt": params[11], "ast": params[12], "tsh": params[13],
+            "creatinine": params[14],
+            "notes": params[15] if len(params) > 15 else None
+        }
+    elif table == "oracle_history":
+        entry = {
+            "id": idx,
+            "timestamp": params[0],
+            "question": params[1],
+            "answer": params[2],
+            "source": params[3],
+            "model_used": params[4]
+        }
+    else:
         return False
+    
+    st.session_state[table].append(entry)
+    st.session_state.next_id[table] = idx + 1
+    return True
 
 
-# Initialize on import
+def execute_delete(table):
+    """Delete all data from a table."""
+    st.session_state[table] = []
+    return True
+
+
+# Initialize
 init_database()
