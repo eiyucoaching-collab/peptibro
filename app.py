@@ -1002,12 +1002,58 @@ with tab_dashboard:
                 weight = st.number_input("Peso (kg)", min_value=40, max_value=200, value=80, step=1)
 
             st.markdown("**💊 Protocolo Actual (últimos 90 días)**")
-            protocol = st.text_area(
-                "Péptidos y dosis",
-                value=default_protocol,
-                height=120,
-                placeholder="ej: BPC-157 250mcg, CJC-1295 2000mcg..."
+            st.caption("Selecciona los péptidos que estás tomando y sus dosis habituales")
+
+            # Predefined peptides with typical doses
+            PEPTIDE_OPTIONS = {
+                "BPC-157 (250 mcg/día)": "BPC-157 250 mcg subcutáneo diario",
+                "BPC-157 (500 mcg/día)": "BPC-157 500 mcg subcutáneo diario",
+                "TB-500 (2.5 mg/semana)": "TB-500 2.5 mg subcutáneo 2x/semana",
+                "TB-500 (5 mg/semana)": "TB-500 5 mg subcutáneo 2x/semana",
+                "CJC-1295 (2000 mcg/día)": "CJC-1295 DAC 2000 mcg subcutáneo diario",
+                "Ipamorelin (200 mcg/día)": "Ipamorelin 200 mcg subcutáneo antes de dormir",
+                "Ipamorelin (300 mcg/día)": "Ipamorelin 300 mcg subcutáneo antes de dormir",
+                "Semaglutide (0.25 mg/semana)": "Semaglutide 0.25 mg subcutáneo semanal",
+                "Semaglutide (0.5 mg/semana)": "Semaglutide 0.5 mg subcutáneo semanal",
+                "Semaglutide (1 mg/semana)": "Semaglutide 1 mg subcutáneo semanal",
+                "Tirzepatide (2.5 mg/semana)": "Tirzepatide 2.5 mg subcutáneo semanal",
+                "Tirzepatide (5 mg/semana)": "Tirzepatide 5 mg subcutáneo semanal",
+                "Tirzepatide (10 mg/semana)": "Tirzepatide 10 mg subcutáneo semanal",
+                "HGH (2 IU/día)": "Hormona de crecimiento 2 IU subcutáneo diario",
+                "HGH (4 IU/día)": "Hormona de crecimiento 4 IU subcutáneo diario",
+                "GHK-Cu (1 mg/día)": "GHK-Cu 1 mg subcutáneo diario",
+                "MOTS-C (5 mg/semana)": "MOTS-C 5 mg subcutáneo semanal",
+                "Epithalon (5 mg/día x 20 días)": "Epithalon 5 mg subcutáneo diario por 20 días",
+                "Selank (250 mcg/día)": "Selank 250 mcg nasal diario",
+                "Semax (300 mcg/día)": "Semax 300 mcg nasal diario",
+                "PT-141 (2 mg)": "PT-141 2 mg subcutáneo según necesidad",
+                "NAD+ (250 mg/semana)": "NAD+ 250 mg intravenoso semanal",
+                "AOD-9604 (300 mcg/día)": "AOD-9604 300 mcg subcutáneo diario",
+                "5-amino-1MQ (50 mg/día)": "5-amino-1MQ 50 mg oral diario",
+            }
+
+            selected_peptides = st.multiselect(
+                "Péptidos en tu protocolo",
+                options=list(PEPTIDE_OPTIONS.keys()),
+                default=[],
+                help="Selecciona uno o varios péptidos"
             )
+
+            # Build protocol text from selection
+            if selected_peptides:
+                protocol = "\n".join([PEPTIDE_OPTIONS[p] for p in selected_peptides])
+                st.info("**Protocolo seleccionado:**\n" + protocol)
+            else:
+                protocol = ""
+
+            # Optional: custom additional notes
+            custom_protocol = st.text_area(
+                "O notas adicionales del protocolo (opcional)",
+                height=60,
+                placeholder="ej: other supplements, fasting protocol, timing..."
+            )
+            if custom_protocol:
+                protocol = protocol + "\n" + custom_protocol if protocol else custom_protocol
 
             st.markdown("**🩺 Síntomas y Estado Actual**")
             col_s1, col_s2 = st.columns(2)
