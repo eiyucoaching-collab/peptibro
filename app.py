@@ -1027,7 +1027,7 @@ with tab_dashboard:
                 placeholder="ej: hinchazón en sitio de inyección, mejora del dolor articular..."
             )
 
-            generate_btn = st.button("🔮 Generar Análisis Predictivo", type="primary", use_container_width=True)
+            generate_btn = st.form_submit_button("🔮 Generar Análisis Predictivo", type="primary", use_container_width=True)
 
         if generate_btn:
             if not GEMINI_KEY:
