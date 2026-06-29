@@ -18,7 +18,7 @@ import sys
 import io
 
 from database_setup import init_database, get_connection, read_sql, execute_insert, execute_delete
-from rag_engine import query_peptide_protocol, ingest_knowledge_base, has_knowledge_base, chat_with_coach
+from rag_engine import query_peptide_protocol, ingest_knowledge_base, has_knowledge_base, chat_with_coach, GEMINI_KEY
 
 # Initialize database
 init_database()
