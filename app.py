@@ -987,6 +987,794 @@ with tab_biblioteca:
             "typical_dose": "1-2 mg subcutáneo según necesidad",
             "cycle": "Según necesidad, no más de 1x/día"
         },
+        # ── Metabólicos / Pérdida de grasa ──
+        "AOD-9604": {
+            "category": "Metabólico",
+            "full_name": "AOD-9604 (Anti-Obesity Drug fragment 176-191)",
+            "description": "Fragmento sintético de la Hormona de Crecimiento (aminoácidos 176-191) que estimula la lipólisis sin afectar la glucosa o crecimiento celular.",
+            "uses": [
+                "Pérdida de grasa localizada",
+                "Reducción de celulitis",
+                "Estimulación del metabolismo lipídico",
+                "Regeneración de cartílago (dosis altas)",
+                "Complemento en tratamientos anti-obesidad"
+            ],
+            "benefits": [
+                "Quema grasa sin efectos sobre nivel de azúcar",
+                "No causa resistencia a la insulina",
+                "Efecto regenerativo en tejido conectivo",
+                "Compatible con ayuno intermitente",
+                "Seguro para uso prolongado"
+            ],
+            "risks": [
+                "Efectos secundarios mínimos",
+                "Posible dolor en el sitio de inyección",
+                "No estudiado en embarazo/lactancia",
+                "Evidencia clínica limitada"
+            ],
+            "typical_dose": "250-500 mcg subcutáneo/día",
+            "cycle": "8-16 semanas"
+        },
+        "Cagrilintide": {
+            "category": "Metabólico",
+            "full_name": "Cagrilintide (CagriSema cuando se combina con Semaglutida)",
+            "description": "Análogo de amilina sintético que promueve saciedad y reduce la ingesta calórica. Combinado con semaglutida en CagriSema.",
+            "uses": [
+                "Tratamiento de obesidad y sobrepeso",
+                "Control del apetito",
+                "Reducción de peso corporal",
+                "Diabetes tipo 2 (en combinación)",
+                "Gestión del peso a largo plazo"
+            ],
+            "benefits": [
+                "Mayor pérdida de peso que semaglutida sola",
+                "Reduce el vaciado gástrico",
+                "Promueve saciedad temprana",
+                "Larga duración de acción (1x/semana)",
+                "Resultados superiores en ensayos clínicos"
+            ],
+            "risks": [
+                "Náuseas (frecuente al inicio)",
+                "Vómitos",
+                "Dolor abdominal",
+                "Estreñimiento",
+                "Reacciones en sitio de inyección"
+            ],
+            "typical_dose": "2.4 mg subcutáneo semanal (con semaglutida)",
+            "cycle": "Tratamiento continuo supervisado"
+        },
+        "Retatrutide": {
+            "category": "Metabólico",
+            "full_name": "Retatrutide (Triple agonista GIP/GLP-1/glucagón)",
+            "description": "Triple agonista de receptores GIP, GLP-1 y glucagón. Pérdida de peso superior a semaglutida y tirzepatide en ensayos clínicos.",
+            "uses": [
+                "Tratamiento de obesidad severa",
+                "Diabetes tipo 2",
+                "Reducción de riesgo cardiovascular",
+                "Gestión del peso a largo plazo",
+                "Síndrome metabólico"
+            ],
+            "benefits": [
+                "Mayor pérdida de peso que tirzepatide (hasta 24%)",
+                "Mejora marcadores cardiovasculares",
+                "Reduce inflamación sistémica",
+                "1x/semana (conveniencia)",
+                "Efecto triple sobre metabolismo"
+            ],
+            "risks": [
+                "Náuseas (frecuente)",
+                "Vómitos",
+                "Diarrea",
+                "Pérdida de masa muscular potencial",
+                "Aún en fase de desarrollo clínico"
+            ],
+            "typical_dose": "Escalado gradual hasta 12 mg semanal",
+            "cycle": "Tratamiento continuo supervisado"
+        },
+        "5-amino-1MQ": {
+            "category": "Metabólico",
+            "full_name": "5-amino-1MQ (5-amino-1-metilquinolina)",
+            "description": "Inhibidor selectivo de NNMT (nicotinamida N-metiltransferasa) que bloquea la acumulación de grasa y mejora el metabolismo energético.",
+            "uses": [
+                "Pérdida de grasa",
+                " Mejora del metabolismo",
+                "Reducción de inflamación",
+                "Protección mitocondrial",
+                "Síndrome metabólico"
+            ],
+            "benefits": [
+                "Bloquea enzima NNMT (acumulación de grasa)",
+                "Mejora sensibilidad a insulina",
+                "Efecto anti-inflamatorio",
+                "Aumenta metabolismo energético",
+                "Efectos en grasa abdominal visceral"
+            ],
+            "risks": [
+                "Efectos secundarios mínimos en estudios",
+                "Posible malestar gastrointestinal",
+                "Datos de seguridad a largo plazo limitados",
+                "No recomendado en embarazo"
+            ],
+            "typical_dose": "50-100 mg oral/día",
+            "cycle": "8-12 semanas"
+        },
+        "L-Carnitina": {
+            "category": "Metabólico",
+            "full_name": "L-Carnitina (L-Carnitine / Acetil-L-Carnitina)",
+            "description": "Aminoácido natural esencial para el transporte de ácidos grasos a las mitocondrias para su oxidación (producción de energía).",
+            "uses": [
+                "Quema de grasa",
+                "Energía y rendimiento físico",
+                "Recuperación muscular",
+                "Salud cardiovascular",
+                "Función cerebral (acetil-L-carnitina)"
+            ],
+            "benefits": [
+                "Transporta grasas a mitocondrias para quemarlas",
+                "Aumenta producción de energía celular",
+                "Reduce daño oxidativo",
+                "Mejora función cardíaca",
+                "Apoya salud neurológica"
+            ],
+            "risks": [
+                "Olor corporal a pescado (en dosis altas)",
+                "Náuseas en dosis elevadas",
+                "Insomnio si se toma tarde",
+                "Posible interacción con anticoagulantes",
+                "Acumulación en enfermedad renal"
+            ],
+            "typical_dose": "500-2000 mg oral/día",
+            "cycle": "8-16 semanas"
+        },
+        "Lipo-C": {
+            "category": "Metabólico",
+            "full_name": "Lipo-C (Mezcla lipotrópica inyectable)",
+            "description": "Mezcla de compuestos lipotrópicos (Metionina, Inositol, Clorhidrato de Colina, B12, Lidocaína) que estimulan la movilización de grasa.",
+            "uses": [
+                "Pérdida de grasa acelerada",
+                "Movilización de grasa localizada",
+                "Energía y vitalidad",
+                "Apoyo al metabolismo del hígado",
+                "Dietas de reducción"
+            ],
+            "benefits": [
+                "Acelera la lipólisis (quema de grasa)",
+                "Mejora el transporte de grasas",
+                "Apoya función hepática",
+                "Aumenta energía",
+                "Puede mejorar apariencia de celulitis"
+            ],
+            "risks": [
+                "Dolor en sitio de inyección",
+                "Náuseas",
+                "Posible reacción alérgica",
+                "No usar con enfermedad hepática severa",
+                "Requiere receta médica"
+            ],
+            "typical_dose": "1-2 mL intramuscular 2x/semana",
+            "cycle": "8-12 semanas"
+        },
+        "Lemon Bottle": {
+            "category": "Metabólico",
+            "full_name": "Lemon Bottle (Inyección lipotrópica)",
+            "description": "Cóctel lipotrópico que contiene riboflavina, metionina, colina y other compuestos para acelerar la quema de grasa.",
+            "uses": [
+                "Pérdida de grasa",
+                "Energía",
+                "Detoxificación hepática",
+                "Metabolismo acelerado",
+                "Complemento a dieta y ejercicio"
+            ],
+            "benefits": [
+                "Fomenta la movilización de grasas",
+                "Aumenta energía celular",
+                "Apoya la función del hígado",
+                "Puede mejorar apariencia de piel",
+                "Rápida absorción"
+            ],
+            "risks": [
+                "Dolor en sitio de inyección",
+                "Náuseas",
+                "Posible orina con olor fuerte (riboflavina)",
+                "Requiere prescripción",
+                "No sustituye dieta y ejercicio"
+            ],
+            "typical_dose": "2 mL intramuscular 1-2x/semana",
+            "cycle": "6-12 semanas"
+        },
+        # ── Reparación / Regeneración ──
+        "KPV": {
+            "category": "Reparación Tisular",
+            "full_name": "KPV (Alfa-MSH tripeptide)",
+            "description": "Tripeptide (Lisina-Prolina-Valina) derivado de la hormona alfa-MSH con potentes propiedades anti-inflamatorias, especialmente en intestino.",
+            "uses": [
+                "Inflamación intestinal (colitis, Crohn)",
+                "Gastritis y úlceras",
+                "Inflamación sistémica",
+                "Dermatitis y eccema",
+                "Recuperación digestiva"
+            ],
+            "benefits": [
+                "Anti-inflamatorio potente en tracto GI",
+                "Reduce citocinas pro-inflamatorias",
+                "Promueve curación de mucosa intestinal",
+                "Seguro para uso prolongado",
+                "Sin efectos significativos sobre melanina (a diferencia de alfa-MSH completa)"
+            ],
+            "risks": [
+                "Efectos secundarios mínimos",
+                "Posible malestar GI al inicio",
+                "No estudiado extensamente en humanos",
+                "Precaución en melanoma (por relación con alfa-MSH)"
+            ],
+            "typical_dose": "200-500 mcg subcutáneo o oral 1-2x/día",
+            "cycle": "4-12 semanas"
+        },
+        "ARA-290": {
+            "category": "Reparación Tisular",
+            "full_name": "ARA-290 (Cibinetide)",
+            "description": "Péptido derivado de eritropoyetina (EPO) que actúa sobre el receptor de eritropoyetina no hematopoyético (EPO-R), con efectos anti-inflamatorios y neuroprotectores sin aumentar glóbulos rojos.",
+            "uses": [
+                "Dolor neuropático",
+                "Neuropatía diabética",
+                "Enfermedades autoinmunes",
+                "Fibromialgia",
+                "Inflamación crónica"
+            ],
+            "benefits": [
+                "Reduce dolor neuropático sin opioides",
+                "Neuroprotector y neuroregenerativo",
+                "Anti-inflamatorio sin efectos hematológicos",
+                "Mejora función nerviosa periférica",
+                "Potencial en enfermedades raras (sarcoidosis)"
+            ],
+            "risks": [
+                "Efectos secundarios mínimos",
+                "Dolor en sitio de inyección",
+                "Datos a largo plazo limitados",
+                "Costo elevado",
+                "Acceso limitado"
+            ],
+            "typical_dose": "4 mg subcutáneo diario",
+            "cycle": "12-24 semanas"
+        },
+        "LL37": {
+            "category": "Reparación Tisular",
+            "full_name": "LL-37 (Antimicrobial Peptide)",
+            "description": "Péptido antimicrobiano natural (catelicidina) producido por el sistema inmune con propiedades antibacterianas, antivirales y de reparación de heridas.",
+            "uses": [
+                "Infecciones resistentes a antibióticos",
+                "Heridas crónicas y úlceras",
+                "Cicatrización de tejidos",
+                "Infecciones cutáneas",
+                "Biofilms bacterianos"
+            ],
+            "benefits": [
+                "Efecto bactericida amplio (gram+ y gram-)",
+                "Rompe biofilms bacterianos",
+                "Promueve curación de heridas",
+                "Efecto antiviral documentado",
+                "Regula respuesta inmune"
+            ],
+            "risks": [
+                "Posible toxicidad en dosis altas",
+                "Efecto citotóxico en concentraciones elevadas",
+                "Producción compleja",
+                "Estabilidad limitada",
+                "No disponible para uso humano general"
+            ],
+            "typical_dose": "Investigacional - no establecido",
+            "cycle": "N/A - uso en investigación"
+        },
+        # ── Hormonales ──
+        "Tesamorelin": {
+            "category": "Eje Hormonal",
+            "full_name": "Tesamorelin (Egrifta)",
+            "description": "Análogo de la hormona de liberación de GH (GHRH) aprobado por FDA para reducir grasa visceral en pacientes con VIH. Estimula la producción natural de GH.",
+            "uses": [
+                "Reducción de grasa visceral",
+                "Síndrome metabólico",
+                "Déficit de GH en adultos",
+                "Gestión de peso en VIH",
+                "Salud metabólica"
+            ],
+            "benefits": [
+                "Estimula GH natural (no suprime eje)",
+                "Reducción demostrada de grasa visceral",
+                "Mejora perfil lipídico",
+                "Seguro a largo plazo (aprobado FDA)",
+                "1x/día subcutáneo"
+            ],
+            "risks": [
+                "Reacciones en sitio de inyección",
+                "Dolor articular",
+                "Edema periférico",
+                "Elevación de glucosa (temporal)",
+                "Costo elevado"
+            ],
+            "typical_dose": "2 mg subcutáneo antes de dormir",
+            "cycle": "Continuo bajo supervisión médica"
+        },
+        "Sermorelin": {
+            "category": "Eje Hormonal",
+            "full_name": "Sermorelin (GHRH 1-29)",
+            "description": "Fragmento sintético de la hormona de liberación de GH (GHRH) que estimula la hipófisis para producir y liberar hormona de crecimiento de forma natural.",
+            "uses": [
+                "Déficit de GH en adultos",
+                "Anti-envejecimiento",
+                "Mejora de composición corporal",
+                "Calidad de sueño",
+                "Salud ósea"
+            ],
+            "benefits": [
+                "Estimula producción natural de GH",
+                "No suprime eje GH (a diferencia de GH exógena)",
+                "Mejora calidad de sueño profundo",
+                "Aumenta masa muscular",
+                "Reduce grasa corporal"
+            ],
+            "risks": [
+                "Reacciones en sitio de inyección",
+                "Náuseas",
+                "Ruborización",
+                "Mareos",
+                "Elevación temporal de glucosa"
+            ],
+            "typical_dose": "0.3-1 mg subcutáneo nocte",
+            "cycle": "3-6 meses, descanso de 1-2 meses"
+        },
+        # ── Longevidad ──
+        "IGF-1 LR3": {
+            "category": "Longevidad",
+            "full_name": "IGF-1 LR3 (Insulin-like Growth Factor-1 Long R3)",
+            "description": "Análogo del factor de crecimiento similar a insulina con vida media extendida. Promueve crecimiento muscular, reparación tisular y neurogénesis.",
+            "uses": [
+                "Crecimiento muscular",
+                "Recuperación de lesiones",
+                "Neuroprotección",
+                "Anti-envejecimiento",
+                "Regeneración de tejidos"
+            ],
+            "benefits": [
+                "Potente efecto anabólico",
+                "Promueve hipertrofia muscular",
+                "Aumenta síntesis de proteínas",
+                "Neuroprotector",
+                "Mejora sensibilidad a insulina en músculo"
+            ],
+            "risks": [
+                "Hipoglucemia (efecto类似 insulina)",
+                "Dolor articular",
+                "Acromegalia si se abusa",
+                "Supresión de GH endógeno",
+                "Crecimiento de tejido no deseado"
+            ],
+            "typical_dose": "20-80 mcg subcutáneo/día",
+            "cycle": "4-8 semanas"
+        },
+        "PEG-MGF": {
+            "category": "Longevidad",
+            "full_name": "PEG-MGF (Pegylated Mechano Growth Factor)",
+            "description": "Factor de crecimiento mecánico pegilado derivado de IGF-1. Estimula la proliferación de células satélite y reparación muscular.",
+            "uses": [
+                "Recuperación muscular intensiva",
+                "Hipertrofia muscular",
+                "Reparación de tendones",
+                "Anti-envejecimiento muscular",
+                "Lesiones deportivas"
+            ],
+            "benefits": [
+                "Estimula células satélite musculares",
+                "Promueve hipertrofia muscular",
+                "Acelera reparación de tendones",
+                "Efecto prolongado (pegilación)",
+                "Complemento potente a entrenamiento"
+            ],
+            "risks": [
+                "Dolor en sitio de inyección",
+                "Hipoglucemia leve",
+                "Posible crecimiento desproporcionado",
+                "No recomendado en cáncer activo",
+                "Requiere experiencia en manejo"
+            ],
+            "typical_dose": "200-400 mcg subcutáneo cada 3-5 días",
+            "cycle": "4-8 semanas"
+        },
+        "Thymosin Alpha-1": {
+            "category": "Inmunomodulador",
+            "full_name": "Thymosin Alpha-1 (Tα1 / Zadaxin)",
+            "description": "Péptido timoico natural que modula la respuesta inmune, aumentando la función de células T y NK. Utilizado en hepatitis, infecciones y cáncer como coadyuvante.",
+            "uses": [
+                "Inmunodeficiencia",
+                "Hepatitis B y C",
+                "Coadyuvante en quimioterapia",
+                "Infecciones virales crónicas",
+                "Vacunación en pacientes inmunocomprometidos"
+            ],
+            "benefits": [
+                "Estimula células T y NK",
+                "Mejora respuesta inmune innata y adaptativa",
+                "Efecto antiviral documentado",
+                "Bien tolerado",
+                "Potencia efecto de vacunas"
+            ],
+            "risks": [
+                "Reacciones en sitio de inyección",
+                "Fiebre leve",
+                "Malestar general",
+                "Posible activación autoinmune",
+                "Costo elevado"
+            ],
+            "typical_dose": "1.6 mg subcutáneo 2x/semana",
+            "cycle": "12-24 semanas"
+        },
+        # ── Nootrópicos ──
+        "Dihexa": {
+            "category": "Nootrópico",
+            "full_name": "Dihexa (N-hexanoic-Tyr-Ile-(6) aminohexanoic amide)",
+            "description": "Péptido nootrópico sintético derivado de Angiotensina IV con potente efecto neurotrófico y de potenciación sináptica. Mejora memoria y función cognitiva.",
+            "uses": [
+                "Mejora de memoria y aprendizaje",
+                "Neurodegeneración (Alzheimer, Parkinson)",
+                "Lesiones cerebrales traumáticas",
+                "Envejecimiento cognitivo",
+                "Ansiedad y depresión"
+            ],
+            "benefits": [
+                "Potencia formación de sinapsis",
+                "Neuroprotector y neuroregenerativo",
+                "Mejora memoria de trabajo",
+                "Efecto ansiolítico",
+                "Biodisponibilidad oral"
+            ],
+            "risks": [
+                "Dolor de cabeza",
+                "Insomnio",
+                "Irritabilidad",
+                "Datos de seguridad a largo plazo limitados",
+                "No recomendado en embarazo"
+            ],
+            "typical_dose": "1-5 mg oral/día",
+            "cycle": "4-12 semanas"
+        },
+        "Noopept": {
+            "category": "Nootrópico",
+            "full_name": "Noopept (Omberacetam / GVS-111)",
+            "description": "Péptido nootrópico sintético derivado de fenilpiracetam con efectos neuroprotectores y de mejora cognitiva superiores a piracetam.",
+            "uses": [
+                "Mejora de memoria",
+                "Atención y concentración",
+                "Ansiedad",
+                "Neuroprotección",
+                "Recuperación de daño cerebral"
+            ],
+            "benefits": [
+                "Potencia memoria y aprendizaje",
+                "Efecto ansiolítico",
+                "Neuroprotector",
+                "Biodisponibilidad oral",
+                "Efecto rápido (30-60 min)"
+            ],
+            "risks": [
+                "Dolor de cabeza",
+                "Irritabilidad",
+                "Insomnio (si se toma tarde)",
+                "Náuseas en dosis altas",
+                "Dependencia psicológica potencial"
+            ],
+            "typical_dose": "10-30 mg oral 1-2x/día",
+            "cycle": "4-8 semanas, descanso de 2 semanas"
+        },
+        "Cerebrolysin": {
+            "category": "Nootrópico",
+            "full_name": "Cerebrolysin (Extracto de cerebro porcino)",
+            "description": "Mezcla de péptidos neurotróficos derivados de cerebro porcino con efectos neuroprotectores y neuroregenerativos. Utilizado en Europa para demencia y ACV.",
+            "uses": [
+                "Demencia vascular y Alzheimer",
+                "Accidente cerebrovascular",
+                "Lesiones cerebrales traumáticas",
+                "Encefalopatía",
+                "Envejecimiento cognitivo"
+            ],
+            "benefits": [
+                "Promueve neuroregeneración",
+                "Protege neuronas del daño excitotóxico",
+                "Mejora función cognitiva en demencia",
+                "Bien tolerado",
+                "Experiencia clínica extensa (Europa)"
+            ],
+            "risks": [
+                "Reacciones en sitio de inyección",
+                "Náuseas",
+                "Cefalea",
+                "Insomnio",
+                "Posible hiperexcitabilidad"
+            ],
+            "typical_dose": "5-30 mL intramuscular/intravenoso diario",
+            "cycle": "4-12 semanas"
+        },
+        "DSIP": {
+            "category": "Nootrópico",
+            "full_name": "DSIP (Delta Sleep-Inducing Peptide)",
+            "description": "Péptido natural que induce el sueño delta (profundo). Regula el ritmo circadiano y promueve un sueño reparador sin efectos sedantes típicos.",
+            "uses": [
+                "Insomnio",
+                "Sueño de baja calidad",
+                "Ritmo circadiano irregular",
+                "Estrés crónico",
+                "Jet lag"
+            ],
+            "benefits": [
+                "Promueve sueño profundo (ondas delta)",
+                "No causa somnolencia diurna",
+                "Regula reloj biológico",
+                "Mejora calidad del sueño sin sedación",
+                "Sin potencial de adicción"
+            ],
+            "risks": [
+                "Dolor en sitio de inyección",
+                "Somnolencia inicial (se adapta)",
+                "Posible hipotensión",
+                "No combinar con sedantes",
+                "Baja biodisponibilidad oral"
+            ],
+            "typical_dose": "100-200 mcg subcutáneo nocte",
+            "cycle": "2-4 semanas"
+        },
+        "Selank": {
+            "category": "Nootrópico",
+            "full_name": "Selank (Thr-Lys-Pro-Arg-Pro-Gly-Pro)",
+            "description": "Péptido ansiolítico sintético derivado de tufticina. Modula GABA y promueve neuroplasticidad sin sedación.",
+            "uses": [
+                "Ansiedad",
+                "Fobias",
+                "Estrés crónico",
+                "ME/CFS",
+                "Ansiedad social"
+            ],
+            "benefits": [
+                "Ansiolítico sin sedación",
+                "Mejora tolerancia al estrés",
+                "Potencia memoria y aprendizaje",
+                "Inmuno-modulador",
+                "Sin dependencia"
+            ],
+            "risks": [
+                "Irritabilidad",
+                "Insomnio (si se toma tarde)",
+                "Dolor de cabeza",
+                "Cambios de humor",
+                "No combinar con ansiolíticos fuertes"
+            ],
+            "typical_dose": "250-750 mcg subcutáneo 1-2x/día",
+            "cycle": "2-4 semanas"
+        },
+        # ── Cosméticos ──
+        "Melanotan II": {
+            "category": "Cosmético",
+            "full_name": "Melanotan II (MT-2)",
+            "description": "Análogo sintético de la alfa-MSH que estimula la producción de melanina, proporcionando bronceado sin exposición solar. También efectos afrodisíacos.",
+            "uses": [
+                "Bronceado sin sol",
+                "Protección UV de la piel",
+                "Disfunción eréctil",
+                "Libido femenina",
+                "Pigmentación de piel"
+            ],
+            "benefits": [
+                "Bronceado intenso sin daño solar",
+                "Protección contra radiación UV",
+                "Efecto afrodisíaco documentado",
+                "Mejora apariencia de piel",
+                "Efecto supresor de apetito"
+            ],
+            "risks": [
+                "Náuseas (frecuente)",
+                "Ruborización facial",
+                "Cambios en pecas/lunares",
+                "Posible crecimiento de nevos",
+                "No recomendado en antecedentes de melanoma"
+            ],
+            "typical_dose": "0.5-1 mg subcutáneo (mantenimiento: 0.5 mg 2-3x/semana)",
+            "cycle": "Ciclo de carga inicial 2 semanas, luego mantenimiento"
+        },
+        "Acetyl Hexapeptide-8": {
+            "category": "Cosmético",
+            "full_name": "Acetyl Hexapeptide-8 (Argireline)",
+            "description": "Péptido tópico anti-arrugas que inhibe la liberación de neurotransmisores en la unión neuromuscular, reduciendo la contracción muscular facial.",
+            "uses": [
+                "Reducción de arrugas dinámicas",
+                "Líneas de expresión frontales",
+                "Patas de gallo",
+                "Líneas de la frente",
+                "Rejuvenecimiento facial"
+            ],
+            "benefits": [
+                "Reduce contracción muscular hasta 30%",
+                "Efecto similar a Botox tópico",
+                "No invasivo",
+                "Compatible con otros activos",
+                "Uso tópico seguro"
+            ],
+            "risks": [
+                "Efecto leve comparado con Botox inyectable",
+                "Irritación cutánea en pieles sensibles",
+                "Requiere uso constante",
+                "No sustituye procedimientos estéticos",
+                "Evidencia limitada a largo plazo"
+            ],
+            "typical_dose": "Aplicación tópica 1-2x/día (5-10% concentración)",
+            "cycle": "Uso continuo"
+        },
+        "Palmitoyl Pentapeptide-4": {
+            "category": "Cosmético",
+            "full_name": "Palmitoyl Pentapeptide-4 (Matrixyl)",
+            "description": "Péptido tópico bioactivo que estimula la síntesis de colágeno, elastina y ácido hialurónico en la dermis, mejorando la estructura de la piel.",
+            "uses": [
+                "Anti-envejecimiento cutáneo",
+                "Pérdida de elasticidad",
+                "Arrugas profundas",
+                "Textura de piel",
+                "Firmeza cutánea"
+            ],
+            "benefits": [
+                "Estimula colágeno tipo I, III y IV",
+                "Aumenta elasticidad",
+                "Reduce profundidad de arrugas",
+                "Mejora hidratación",
+                "Efecto antienvejecimiento demostrado"
+            ],
+            "risks": [
+                "Efectos secundarios mínimos",
+                "Posible irritación leve en pieles sensibles",
+                "Resultados visibles en 8-12 semanas",
+                "No es un reemplazo para procedimientos",
+                "Requiere protección solar"
+            ],
+            "typical_dose": "Aplicación tópica 1-2x/día (3-5% concentración)",
+            "cycle": "Uso continuo"
+        },
+        # ── Fertilidad / Hormonal ──
+        "hCG": {
+            "category": "Hormonal",
+            "full_name": "hCG (Gonadotropina Coriónica Humana)",
+            "description": "Hormona natural producida durante el embarazo. En hombres, estimula los testículos para producir testosterona. Utilizada en TRT y fertilidad.",
+            "uses": [
+                "Preservación de fertilidad en TRT",
+                "Estimulación de testosterona",
+                "Criptorquidia",
+                "Pérdida de peso (dieta hCG)",
+                "Apoyo a fertilidad masculina"
+            ],
+            "benefits": [
+                "Mantiene conteo espermático en TRT",
+                "Estimula testosterona natural",
+                "Previene atrofia testicular",
+                "Bien tolerado",
+                "Apoyo a fertilidad masculina"
+            ],
+            "risks": [
+                "Ginecomastia (por aromatización)",
+                "Retención de líquidos",
+                "Dolor en sitio de inyección",
+                "Posible hipogonadismo si se abusa",
+                "No recomendado en cáncer de próstata"
+            ],
+            "typical_dose": "500-2000 UI subcutáneo 2-3x/semana",
+            "cycle": "Concurrente con TRT"
+        },
+        "Kisspeptin-10": {
+            "category": "Hormonal",
+            "full_name": "Kisspeptin-10 (KP-10)",
+            "description": "Péptido natural que estimula la liberación de GnRH, FSH y LH. Regula la función reproductiva y puede mejorar fertilidad y testosterona.",
+            "uses": [
+                "Hipogonadismo hipogonadotrópico",
+                "Infertilidad",
+                "Baja testosterona",
+                "Disfunción reproductiva",
+                "Estimulación de LH/FSH"
+            ],
+            "benefits": [
+                "Estimula eje reproductivo natural",
+                "Aumenta LH y FSH",
+                "Mejora fertilidad",
+                "Efecto fisiológico (no suprime eje)",
+                "Potencial en tratamientos de fertilidad"
+            ],
+            "risks": [
+                "Náuseas",
+                "Vómitos",
+                "Ruborización",
+                "Dolor en sitio de inyección",
+                "Estimulación ovárica no deseada"
+            ],
+            "typical_dose": "0.5-1 mcg/kg subcutáneo/día",
+            "cycle": "Bajo supervisión médica reproductiva"
+        },
+        # ── Otros ──
+        "Lunasina": {
+            "category": "Longevidad",
+            "full_name": "Lunasina (Lunasin)",
+            "description": "Péptido derivado de soja con propiedades anti-inflamatorias y epigenéticas. Inhibe la acetilación de histonas y modula expresión génica.",
+            "uses": [
+                "Inflamación crónica",
+                "Epigenética / expresión génica",
+                "Protección cardiovascular",
+                "Salud ósea",
+                "Potencial antitumoral"
+            ],
+            "benefits": [
+                "Modula expresión génica vía epigenética",
+                "Anti-inflamatorio",
+                "Protector cardiovascular",
+                "Biodisponibilidad oral",
+                "Origen natural (soja)"
+            ],
+            "risks": [
+                "Efectos secundarios mínimos",
+                "Alergia a soja (contraindicado)",
+                "Datos clínicos limitados",
+                "No recomendado en embarazo"
+            ],
+            "typical_dose": "16-50 mg oral/día",
+            "cycle": "8-12 semanas"
+        },
+        "Mecasermin": {
+            "category": "Eje Hormonal",
+            "full_name": "Mecasermin (Increlex - IGF-1)",
+            "description": "IGF-1 recombinante aprobado por FDA para tratamiento de déficit severo de IGF-1. Promueve crecimiento lineal y desarrollo tisular.",
+            "uses": [
+                "Déficit severo de IGF-1",
+                "Enanismo (insensibilidad a GH)",
+                "Crecimiento en niños",
+                "Regeneración tisular",
+                "Apoyo nutricional severo"
+            ],
+            "benefits": [
+                "Estimula crecimiento lineal",
+                "Promueve desarrollo muscular",
+                "Mejora densidad ósea",
+                "Efecto anabólico potente",
+                "FDA aprobado para indicaciones específicas"
+            ],
+            "risks": [
+                "Hipoglucemia (significativa)",
+                "Dolor en sitio de inyección",
+                "Tonsilas/adenoides agrandadas",
+                "Cefalea",
+                "Posible riesgo de neoplasia"
+            ],
+            "typical_dose": "0.04-0.12 mg/kg subcutáneo 2x/día",
+            "cycle": "Bajo supervisión endocrinológica"
+        },
+        "Eloralintide": {
+            "category": "Metabólico",
+            "full_name": "Eloralintide (Novo Nordisk)",
+            "description": "Análogo de amilina en desarrollo para obesidad. Reduce peso corporal a través de mecanismos de saciedad similares a la amilina natural.",
+            "uses": [
+                "Tratamiento de obesidad",
+                "Control del peso",
+                "Complemento a agonistas GLP-1",
+                "Síndrome metabólico",
+                "Diabetes tipo 2"
+            ],
+            "benefits": [
+                "Mecanismo complementario a GLP-1",
+                "Promueve saciedad",
+                "Larga duración de acción",
+                "Potencial sinérgico con semaglutida",
+                "Ensayos clínicos prometedores"
+            ],
+            "risks": [
+                "Náuseas",
+                "Vómitos",
+                "Fase temprana de desarrollo",
+                "Datos de seguridad limitados",
+                "No aprobado aún"
+            ],
+            "typical_dose": "Escalado gradual (en investigación)",
+            "cycle": "Tratamiento continuo (en investigación)"
+        },
     }
 
     # Search and filter
